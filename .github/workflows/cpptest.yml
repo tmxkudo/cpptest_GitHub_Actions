@@ -27,6 +27,11 @@ jobs:
         & "C:\Program Files\Parasoft\C++test\2021.2\cpptest\bin\cpptesttrace.exe" make all
       working-directory: ./FlowAnalysis
 
+    - name: Remove Workspace
+      run: |
+        rd /s /q ../workspace
+      working-directory: ./
+
     - name: Run C++test
       # Use the 'run-cpptest-action' GitHub Action.
       uses: parasoft/run-cpptest-action@1.0.1
@@ -36,9 +41,6 @@ jobs:
         testConfig: 'builtin://MISRA C 2012'
         reportFormat: xml,html,sarif
         input: './FlowAnalysis/cpptestscan.bdf'
-        # For Standard
-         # additionalParams: '-property report.custom.extension=sarif -property report.custom.xsl.file=${PARASOFT_SARIF_XSL}'
-         # commandLinePattern : ' ${cpptestcli} -data ../workspace -config "${testConfig}" -report "${reportDir}" -bdf "${input}" ${additionalParams} '
         additionalParams: '-localsettings ./settings/settings.properties -localsettings ../cpptestcli.properties -publish'
         commandLinePattern: '${cpptestcli} -data ../workspace -config "${testConfig}" -report "${reportDir}" -bdf "${input}" ${additionalParams}'
 
